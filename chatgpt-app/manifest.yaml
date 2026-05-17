@@ -1,0 +1,72 @@
+schema_version: v1
+
+name: AgentTutor — AI Agents Course Companion
+description: >
+  An intelligent course companion for learning AI and agentic systems.
+  Covers 10 chapters on LLMs, agent loops, memory, tools, and multi-agent architectures.
+  Includes concept explanations, quizzes, progress tracking, and Socratic teaching —
+  all powered by a Zero-Backend-LLM FastAPI backend.
+
+contact_email: contactdr.abrehman@gmail.com
+
+legal:
+  privacy_policy_url: https://example.com/privacy
+  terms_of_service_url: https://example.com/terms
+
+api:
+  type: openapi
+  url: https://your-deploy-url.fly.dev/openapi.json
+  auth:
+    type: none
+
+skills:
+  - name: concept-explainer
+    description: Explains complex AI/agentic concepts with layered depth — one-liner, analogy, then technical detail.
+    trigger_phrases:
+      - "what is"
+      - "explain"
+      - "I don't understand"
+      - "define"
+    skill_file: skills/concept-explainer/SKILL.md
+
+  - name: quiz-master
+    description: Administers chapter quizzes, grades answers, and explains wrong answers using course content.
+    trigger_phrases:
+      - "quiz me"
+      - "test me"
+      - "start the quiz"
+      - "take the quiz"
+    skill_file: skills/quiz-master/SKILL.md
+
+  - name: socratic-tutor
+    description: Guides learners to discover answers through targeted questions rather than direct explanation.
+    trigger_phrases:
+      - "help me think through"
+      - "guide me"
+      - "ask me questions about"
+    skill_file: skills/socratic-tutor/SKILL.md
+
+  - name: progress-motivator
+    description: Celebrates milestones, surfaces streak data, and keeps learners engaged with personalized encouragement.
+    trigger_phrases:
+      - "how am I doing"
+      - "what's my progress"
+      - "show my streak"
+      - "my stats"
+    skill_file: skills/progress-motivator/SKILL.md
+
+capabilities:
+  - fetch_content: true
+  - submit_quizzes: true
+  - track_progress: true
+  - search_content: true
+
+freemium:
+  free_chapters: [1, 2, 3]
+  premium_chapters: [4, 5, 6, 7, 8, 9, 10]
+  upgrade_prompt: "Upgrade to Premium to unlock all 10 chapters and the full quiz bank."
+
+zero_llm_policy: >
+  This backend makes ZERO LLM API calls. All AI intelligence (explanations, Socratic dialogue,
+  motivational responses) is delivered by the ChatGPT App frontend using these SKILL.md files
+  as behavioral specifications. Violation of this policy = disqualification from Hackathon IV.
