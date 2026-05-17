@@ -1,0 +1,95 @@
+openapi: "3.1.0"
+info:
+  title: AgentTutor Hybrid — AI Mentor Agent
+  version: "2.0.0"
+  description: Premium endpoint for personalised Socratic tutoring via an AI agent with tools.
+
+paths:
+  /hybrid/mentor:
+    post:
+      summary: Ask the AI Mentor a complex question or get unstuck
+      operationId: mentor_session
+      tags:
+        - Hybrid Intelligence
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MentorRequest"
+            example:
+              user_id: "123e4567-e89b-12d3-a456-426614174000"
+              question: "I don't understand how MCP is different from just calling an API directly. Can you help?"
+      responses:
+        "200":
+          description: Personalised mentor response with tool usage metadata
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MentorResponse"
+              example:
+                mentor_response: "Great question! Let me pull up the relevant chapter... Based on what you have completed so far..."
+                chapters_referenced: ["chapter-04", "chapter-02"]
+                tools_used: ["get_chapter_content", "get_student_progress"]
+                estimated_cost_usd: 0.090
+        "403":
+          description: User is on the free tier — premium required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PremiumRequiredError"
+        "422":
+          description: Validation error — missing or blank question
+        "500":
+          description: Mentor agent session failed
+
+components:
+  schemas:
+    MentorRequest:
+      type: object
+      required: [user_id, question]
+      properties:
+        user_id:
+          type: string
+          format: uuid
+          description: UUID of the student requesting mentorship
+        question:
+          type: string
+          description: The student's free-form question or description of where they are stuck
+          minLength: 1
+
+    MentorResponse:
+      type: object
+      required:
+        - mentor_response
+        - chapters_referenced
+        - tools_used
+        - estimated_cost_usd
+      properties:
+        mentor_response:
+          type: string
+          description: Socratic, personalised guidance from the AI mentor
+        chapters_referenced:
+          type: array
+          items:
+            type: string
+          description: Chapter IDs fetched by the get_chapter_content tool during this session
+        tools_used:
+          type: array
+          items:
+            type: string
+          description: Names of all tools invoked by the agent (e.g., get_chapter_content, get_student_progress)
+        estimated_cost_usd:
+          type: number
+          format: float
+          description: Fixed estimated cost for this mentor session
+
+    PremiumRequiredError:
+      type: object
+      properties:
+        error:
+          type: string
+          enum: [premium_required]
+        detail:
+          type: string
+          example: "This feature requires a premium subscription."

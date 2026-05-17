@@ -1,0 +1,134 @@
+openapi: "3.1.0"
+info:
+  title: AgentTutor Hybrid — LLM Graded Assessment
+  version: "2.0.0"
+  description: Premium endpoint for AI-graded free-form assessment answers.
+
+paths:
+  /hybrid/assess:
+    post:
+      summary: Grade a student's written answer using AI
+      operationId: assess_answer
+      tags:
+        - Hybrid Intelligence
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssessRequest"
+            example:
+              user_id: "123e4567-e89b-12d3-a456-426614174000"
+              chapter_id: "chapter-01"
+              question: "Explain the agent loop in your own words."
+              student_answer: "An agent loop is when the AI keeps running in a cycle..."
+      responses:
+        "200":
+          description: Successful assessment with structured feedback
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssessResponse"
+              example:
+                score: 8
+                max_score: 10
+                grade: "B+"
+                feedback: "Good understanding of the cycle. You correctly identified..."
+                what_was_correct: "The cyclical nature and the role of perception."
+                what_was_missing: "The role of memory and tool use in completing a cycle."
+                improvement_tip: "Review the Memory section of Chapter 1 to strengthen this."
+                estimated_cost_usd: 0.014
+        "403":
+          description: User is on the free tier — premium required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PremiumRequiredError"
+        "404":
+          description: Chapter content file not found on the filesystem
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "422":
+          description: Validation error — missing or blank required fields
+        "500":
+          description: AI response could not be parsed into the expected format
+
+components:
+  schemas:
+    AssessRequest:
+      type: object
+      required: [user_id, chapter_id, question, student_answer]
+      properties:
+        user_id:
+          type: string
+          format: uuid
+          description: UUID of the student submitting the answer
+        chapter_id:
+          type: string
+          description: ID of the chapter the question is from (e.g., "chapter-01")
+        question:
+          type: string
+          description: The original question posed to the student
+          minLength: 1
+        student_answer:
+          type: string
+          description: The student's free-form written response
+          minLength: 1
+
+    AssessResponse:
+      type: object
+      required:
+        - score
+        - max_score
+        - grade
+        - feedback
+        - what_was_correct
+        - what_was_missing
+        - improvement_tip
+        - estimated_cost_usd
+      properties:
+        score:
+          type: integer
+          minimum: 0
+          maximum: 10
+        max_score:
+          type: integer
+          enum: [10]
+        grade:
+          type: string
+          description: Letter grade (e.g., A, B+, C)
+        feedback:
+          type: string
+          description: Overall encouraging feedback summary
+        what_was_correct:
+          type: string
+          description: Specific elements the student got right
+        what_was_missing:
+          type: string
+          description: Gaps identified relative to chapter content
+        improvement_tip:
+          type: string
+          description: One actionable suggestion for improvement
+        estimated_cost_usd:
+          type: number
+          format: float
+          description: Fixed estimated cost for this request
+
+    PremiumRequiredError:
+      type: object
+      properties:
+        error:
+          type: string
+          enum: [premium_required]
+        detail:
+          type: string
+          example: "This feature requires a premium subscription."
+
+    NotFoundError:
+      type: object
+      properties:
+        detail:
+          type: string
+          example: "Chapter 'chapter-99' content not found"
