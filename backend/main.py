@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.config import settings
 from backend.db.connection import create_all_tables
 from backend.routers import chapters, quizzes, progress, search, access, users
+from backend.routers import hybrid
 
 
 @asynccontextmanager
@@ -35,6 +36,7 @@ app.include_router(quizzes.router)
 app.include_router(progress.router)
 app.include_router(search.router)
 app.include_router(access.router)
+app.include_router(hybrid.router, prefix="/hybrid", tags=["Hybrid Intelligence"])
 
 
 @app.get("/health", tags=["Health"])
