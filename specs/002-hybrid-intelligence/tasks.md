@@ -88,9 +88,9 @@
 
 **Independent Test**: Both 403 test cases pass (already validated in US1/US2); `git diff main -- backend/routers/chapters.py [...]` produces empty output; full Phase 1 test suite passes with zero regressions.
 
-- [ ] T015 [P] [US3] Run `git diff main -- backend/routers/chapters.py backend/routers/quizzes.py backend/routers/progress.py backend/routers/search.py backend/routers/access.py backend/routers/users.py backend/db/ backend/models/ backend/storage/ backend/config.py` and confirm output is empty (no Phase 1 files modified); document result
-- [ ] T016 [US3] Run full Phase 1 test suite `pytest tests/ -v --ignore=tests/integration/test_hybrid_assess_api.py --ignore=tests/integration/test_hybrid_mentor_api.py` and confirm zero failures (regression guard)
-- [ ] T017 [P] [US3] Confirm `/health` returns `{"status": "ok", "llm_calls": 0}` by calling the running server — Phase 1 invariant still holds after hybrid router registration
+- [X] T015 [P] [US3] Run `git diff main -- backend/routers/chapters.py backend/routers/quizzes.py backend/routers/progress.py backend/routers/search.py backend/routers/access.py backend/routers/users.py backend/db/ backend/models/ backend/storage/ backend/config.py` and confirm output is empty (no Phase 1 files modified); document result
+- [X] T016 [US3] Run full Phase 1 test suite `pytest tests/ -v --ignore=tests/integration/test_hybrid_assess_api.py --ignore=tests/integration/test_hybrid_mentor_api.py` and confirm zero failures (regression guard)
+- [X] T017 [P] [US3] Confirm `/health` returns `{"status": "ok", "llm_calls": 0}` by calling the running server — Phase 1 invariant still holds after hybrid router registration
 
 **Checkpoint**: Architecture separation verified ✅; zero Phase 1 regressions ✅; health endpoint invariant preserved ✅ — User Story 3 complete.
 
@@ -100,10 +100,10 @@
 
 **Purpose**: Final validation, documentation completeness, and OpenAPI verification.
 
-- [ ] T018 [P] Confirm `logger.info` cost-logging calls are present in `backend/routers/hybrid.py` for both endpoints (grep for `"assess cost"` and `"mentor cost"`)
-- [ ] T019 [P] Run `pytest tests/ -v` (all tests including hybrid) and confirm 100% pass rate
-- [ ] T020 Run quickstart.md validation: install `openai-agents`, set `GEMINI_API_KEY` in `backend/.env`, start server, verify `/docs` shows both hybrid endpoints under "Hybrid Intelligence" tag with correct request/response schemas
-- [ ] T021 [P] Confirm `backend/.env` is listed in `.gitignore` (GEMINI_API_KEY must never be committed)
+- [X] T018 [P] Confirm `logger.info` cost-logging calls are present in `backend/routers/hybrid.py` for both endpoints (grep for `"assess cost"` and `"mentor cost"`)
+- [X] T019 [P] Run `pytest tests/ -v` (all tests including hybrid) and confirm 100% pass rate
+- [X] T020 Run quickstart.md validation: install `openai-agents`, set `GEMINI_API_KEY` in `backend/.env`, start server, verify `/docs` shows both hybrid endpoints under "Hybrid Intelligence" tag with correct request/response schemas
+- [X] T021 [P] Confirm `backend/.env` is listed in `.gitignore` (GEMINI_API_KEY must never be committed)
 
 ---
 
