@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     DATABASE_URL: str
     APP_ENV: str = "development"
     ALLOWED_ORIGINS: str = "http://localhost:3000"
+    GEMINI_API_KEY: str = ""
+    OPENAI_API_KEY: str = "dummy-key"
 
     @field_validator("DATABASE_URL")
     @classmethod

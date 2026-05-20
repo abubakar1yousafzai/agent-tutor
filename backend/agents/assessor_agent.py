@@ -25,7 +25,7 @@ def extract_json(raw: str) -> dict:
 
 
 def run_assessment(chapter_content: str, question: str, student_answer: str) -> dict:
-    agent = Agent(model=get_llm_model(), instructions=ASSESSOR_SYSTEM_PROMPT)
+    agent = Agent(name="Assessor", model=get_llm_model(), instructions=ASSESSOR_SYSTEM_PROMPT)
     message = (
         f"Chapter Content:\n{chapter_content}\n\n"
         f"Question: {question}\n\n"
