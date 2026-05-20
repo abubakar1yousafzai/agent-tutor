@@ -116,8 +116,9 @@ async def mentor_session(body: MentorRequest, db: AsyncSession = Depends(get_db)
         mentor_response, chapters_referenced, tools_used = await asyncio.to_thread(
             run_mentor, body.question, progress_summary
         )
-    except Exception:
-        raise HTTPException(status_code=500, detail="Mentor session failed.")
+    except Exception as e:
+        logger.error("Mentor session failed: %s", str(e), exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Mentor session failed: {str(e)}")
 
     logger.info("mentor cost=0.090 user=%s tools=%s", body.user_id, tools_used)
     return MentorResponse(
